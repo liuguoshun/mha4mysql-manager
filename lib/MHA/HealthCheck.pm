@@ -107,6 +107,7 @@ sub connect {
     $self->{dbh}->{InactiveDestroy} = 1;
     $self->set_wait_timeout($wait_timeout);
     my $rc = 0;
+    $no_advisory_lock = 1
     unless ($no_advisory_lock) {
       $log->debug("Trying to get advisory lock..");
       $rc = MHA::SlaveUtil::get_monitor_advisory_lock( $self->{dbh},
@@ -297,7 +298,7 @@ sub ping_insert($) {
     $dbh->{RaiseError} = 1;
     $dbh->do("CREATE DATABASE IF NOT EXISTS infra");
     $dbh->do(
-"CREATE TABLE IF NOT EXISTS infra.chk_masterha (`key` tinyint NOT NULL primary key,`val` int(10) unsigned NOT NULL DEFAULT '0')"
+"CREATE TABLE IF NOT EXISTS infra.chk_masterha (`key` tinyint NOT NULL primary key,`val` int(10) unsigned NOT NULL DEFAULT '0') engine=MyISAM"
     );
     $dbh->do(
 "INSERT INTO infra.chk_masterha values (1,unix_timestamp()) ON DUPLICATE KEY UPDATE val=unix_timestamp()"
