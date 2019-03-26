@@ -107,7 +107,7 @@ sub connect {
     $self->{dbh}->{InactiveDestroy} = 1;
     $self->set_wait_timeout($wait_timeout);
     my $rc = 0;
-    $no_advisory_lock = 1
+    $no_advisory_lock = 1;
     unless ($no_advisory_lock) {
       $log->debug("Trying to get advisory lock..");
       $rc = MHA::SlaveUtil::get_monitor_advisory_lock( $self->{dbh},
